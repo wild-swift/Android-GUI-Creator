@@ -58,25 +58,40 @@ public class CompositeGestureDetector {
         for (byte i = 0; i < maxFingers; i++) {
             states[i] = new FingerState();
         }
+
+        gestures = new Gesture[maxFingers];
+        for (byte i = 0; i < maxFingers; i++) {
+            gestures = null;
+        }
     }
 
     public boolean onMotionEvent(MotionEvent event) {
+        int actionIndexExternal;
         int actionIndex;
         switch (event.getActionMasked()){
             case MotionEvent.ACTION_DOWN:
                 // if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
                 listener.onGestureStart(event);
             case MotionEvent.ACTION_POINTER_DOWN:
-                // check index of finger
-                actionIndex = event.getActionIndex();
-                if (maxFingers <= actionIndex) return false;
-
-                // update state of fingers
-                states[actionIndex].setDownTime(event.getEventTime());
-                states[actionIndex].setDown(true);
-                for (int i = actionIndex + 1; i < maxFingers; i++) {
-                    states[i].setFingerNum(states[i].getFingerNum() + 1);
+                // find empty slot for new finger, mark it as busy
+                // and increment indexes of all fingers that more or equals than new 
+                actionIndexExternal = event.getActionIndex();
+                boolean foundEmptySlot = false;
+                actionIndex = -1;
+                for (int i = 0; i < maxFingers; i++){
+                    if (states[i].isDown() && states[i].getFingerNum() >= actionIndexExternal) {
+                        states[i].setFingerNum(states[i].getFingerNum() + 1);
+                    }
+                    if (!states[i].isDown() && !foundEmptySlot) {
+                        foundEmptySlot = true;
+                        states[i].setDown(true);
+                        states[i].setDownTime(event.getEventTime());
+                        states[i].setFingerNum(actionIndexExternal);
+                        actionIndex = i;
+                    }
                 }
+                Log.i(getClass().getSimpleName(), "onMotionEvent ACTION_DOWN actionIndex = " + actionIndex + " actionIndexExternal = " + actionIndexExternal);
+                if (actionIndex == -1) return false;
 
                 // send event to associated GestureDetector group
                 detectors[actionIndex].onTouchEvent(MotionEvent.obtain(event.getEventTime(), event.getEventTime(), MotionEvent.ACTION_DOWN,
@@ -90,22 +105,23 @@ public class CompositeGestureDetector {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 // check index of finger
-                actionIndex = event.getActionIndex();
-                if (maxFingers <= actionIndex) return false;
-                // last finger may be not 0 index, but android system always send 0 as index for action up
-                if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-                    for(int i = 0; i < maxFingers; i ++){
-                        if (states[i].isDown()) {
-                            actionIndex = i;
-                        }
+                actionIndexExternal = event.getActionIndex();
+                // up event generated in 0 - event.getPointerCount() interval
+                // you may receive all up events with 0 actionIndex
+                actionIndex = -1;
+                for (int i = 0; i < maxFingers; i++) {
+                    if (states[i].isDown() && states[i].getFingerNum() == actionIndexExternal) {
+                        actionIndex = i;
+                        states[i].setDown(false);
+                    }
+                    if (states[i].isDown() && states[i].getFingerNum() >= actionIndexExternal) {
+                        states[i].setFingerNum(states[i].getFingerNum() - 1);
                     }
                 }
+                Log.i(getClass().getSimpleName(), "onMotionEvent ACTION_UP actionIndex = " + actionIndex + " actionIndexExternal = " + actionIndexExternal);
+                // if action index not changed action not for our detector
+                if (actionIndex == -1) return false;
 
-                // update state of fingers
-                for (int i = actionIndex + 1; i < maxFingers; i++){
-                    states[i].setFingerNum(states[i].getFingerNum() - 1);
-                }
-                states[actionIndex].setDown(false);
 
                 // send event to associated GestureDetector group
                 detectors[actionIndex].onTouchEvent(MotionEvent.obtain(states[actionIndex].getDownTime(), event.getEventTime(), MotionEvent.ACTION_UP,
@@ -146,39 +162,41 @@ public class CompositeGestureDetector {
         }
 
         public void onShowPress(MotionEvent motionEvent) {
+            // Pass not need
         }
 
         public boolean onSingleTapUp(MotionEvent motionEvent) {
-            Log.i(getClass().getSimpleName(), "onSingleTapUp " + index);
+            Log.d(getClass().getSimpleName(), "onSingleTapUp " + index);
             return true;
         }
 
         public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            Log.i(getClass().getSimpleName(), "onScroll " + index);
+            Log.d(getClass().getSimpleName(), "onScroll " + index);
             return true;
         }
 
         public void onLongPress(MotionEvent motionEvent) {
-            Log.i(getClass().getSimpleName(), "onLongPress " + index);
+            // because this event generates from handler after some time, it have special handling
+            Log.d(getClass().getSimpleName(), "onLongPress " + index);
         }
 
         public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            Log.i(getClass().getSimpleName(), "onFling " + index);
+            Log.d(getClass().getSimpleName(), "onFling " + index);
             return true;
         }
 
         public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-            Log.i(getClass().getSimpleName(), "onSingleTapConfirmed " + index);
+            // Pass not need
             return true;
         }
 
         public boolean onDoubleTap(MotionEvent motionEvent) {
-            Log.i(getClass().getSimpleName(), "onDoubleTap " + index);
+            Log.d(getClass().getSimpleName(), "onDoubleTap " + index);
             return true;
         }
 
         public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-            Log.i(getClass().getSimpleName(), "onDoubleTapEvent " + index);
+            // Pass not need
             return false;
         }
     }

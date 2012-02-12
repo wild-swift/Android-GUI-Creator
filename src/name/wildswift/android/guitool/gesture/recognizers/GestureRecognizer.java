@@ -16,27 +16,15 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool.gesture.gestures;
+package name.wildswift.android.guitool.gesture.recognizers;
 
-import android.view.MotionEvent;
+import name.wildswift.android.guitool.gesture.gestures.Gesture;
 
 /**
- * Abstract class for gestures
- *
- * 11.02.12
+ * 12.02.12
  *
  * @author Swift
  */
-public abstract class Gesture {
-    private MotionEvent[] event;
-
-    protected Gesture(MotionEvent[] event) {
-        this.event = event;
-    }
-
-    public abstract GestureType getType();
-
-    public MotionEvent getEvent(int index) {
-        return event[index];
-    }
+public abstract class GestureRecognizer<T extends Gesture> {
+    public abstract void onNewEvent();
 }

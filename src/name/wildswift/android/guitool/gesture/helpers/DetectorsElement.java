@@ -39,7 +39,7 @@ public class DetectorsElement {
         this.detector.setIsLongpressEnabled(false);
         this.detector.setOnDoubleTapListener(listener);
         this.longPressDetector = new GestureDetector(context, new LongPressWrapper(listener));
-        this.detector.setIsLongpressEnabled(true);
+        this.longPressDetector.setIsLongpressEnabled(true);
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
