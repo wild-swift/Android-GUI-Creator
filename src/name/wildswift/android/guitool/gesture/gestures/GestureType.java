@@ -16,18 +16,13 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool;
+package name.wildswift.android.guitool.gesture.gestures;
 
-import android.app.Activity;
-import android.os.Bundle;
-
-public class AndroidInterfaceTool extends Activity
-{
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-    }
+/**
+ * 12.02.12
+ *
+ * @author Swift
+ */
+public enum GestureType {
+    singleTap, scroll, longPress, fling, doubleTap
 }

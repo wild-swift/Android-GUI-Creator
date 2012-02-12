@@ -16,18 +16,42 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool;
+package name.wildswift.android.guitool.view;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import name.wildswift.android.guitool.R;
 
-public class AndroidInterfaceTool extends Activity
-{
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+/**
+ * 29.01.12
+ *
+ * @author Swift
+ */
+public class Panel extends FrameLayout {
+
+    public Panel(Context context) {
+        super(context);
+    }
+
+    public Panel(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public Panel(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+
+
+    protected class Arrow extends View {
+
+        public Arrow(Context context) {
+            super(context);
+//            setBackgroundColor();
+        }
+
     }
 }

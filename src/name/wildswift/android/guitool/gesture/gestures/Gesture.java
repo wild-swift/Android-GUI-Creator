@@ -16,18 +16,27 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool;
+package name.wildswift.android.guitool.gesture.gestures;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.view.MotionEvent;
 
-public class AndroidInterfaceTool extends Activity
-{
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+/**
+ * Abstract class for gestures
+ *
+ * 11.02.12
+ *
+ * @author Swift
+ */
+public abstract class Gesture {
+    private MotionEvent event;
+
+    protected Gesture(MotionEvent event) {
+        this.event = event;
+    }
+
+    public abstract GestureType getType();
+
+    public MotionEvent getEvent() {
+        return event;
     }
 }

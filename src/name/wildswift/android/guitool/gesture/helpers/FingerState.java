@@ -16,18 +16,42 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool;
+package name.wildswift.android.guitool.gesture.helpers;
 
-import android.app.Activity;
-import android.os.Bundle;
+/**
+ * Class for saving basic state of each finger gesture
+ *
+ * 12.02.12
+ *
+ * @author Swift
+ */
+public class FingerState {
+    private Long downTime;
+    private int fingerNum = 0;
+    private boolean down;
 
-public class AndroidInterfaceTool extends Activity
-{
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+    public Long getDownTime() {
+        return downTime;
+    }
+
+    public void setDownTime(Long downTime) {
+        this.downTime = downTime;
+    }
+
+    public int getFingerNum() {
+        return fingerNum;
+    }
+
+    public void setFingerNum(int fingerNum) {
+        this.fingerNum = fingerNum;
+    }
+
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
     }
 }

@@ -3,9 +3,9 @@
       package="name.wildswift.android.guitool"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:label="Gui Desiner" >
-        <activity android:name="AndroidInterfaceTool"
-                  android:label="@string/app_name">
+    <supports-screens android:xlargeScreens="true"/>
+    <application android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
+        <activity android:name=".MainBuilderScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
