@@ -18,13 +18,13 @@
 
 package name.wildswift.android.guitool.gesture.recognizers;
 
-import name.wildswift.android.guitool.gesture.gestures.Gesture;
+import name.wildswift.android.guitool.gesture.recognizers.simple.SimpleGesture;
 
 /**
  * 12.02.12
  *
  * @author Swift
  */
-public abstract class GestureRecognizer<T extends Gesture> {
-    public abstract void onNewEvent();
+public abstract class GestureRecognizer {
+    public abstract boolean onNewEvent(SimpleGesture[] gestures);
 }

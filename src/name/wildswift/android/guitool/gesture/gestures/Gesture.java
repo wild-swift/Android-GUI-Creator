@@ -18,8 +18,6 @@
 
 package name.wildswift.android.guitool.gesture.gestures;
 
-import android.view.MotionEvent;
-
 /**
  * Abstract class for gestures
  *
@@ -28,15 +26,6 @@ import android.view.MotionEvent;
  * @author Swift
  */
 public abstract class Gesture {
-    private MotionEvent[] event;
-
-    protected Gesture(MotionEvent[] event) {
-        this.event = event;
-    }
 
     public abstract GestureType getType();
-
-    public MotionEvent getEvent(int index) {
-        return event[index];
-    }
 }

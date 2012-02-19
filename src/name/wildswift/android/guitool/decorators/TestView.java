@@ -26,6 +26,7 @@ import android.view.View;
 import name.wildswift.android.guitool.gesture.CompositeGestureDetector;
 import name.wildswift.android.guitool.gesture.OnGestureListener;
 import name.wildswift.android.guitool.gesture.gestures.Gesture;
+import name.wildswift.android.guitool.gesture.gestures.GestureType;
 
 /**
  * 11.02.12
@@ -57,6 +58,8 @@ public class TestView extends View implements OnGestureListener {
     }
 
     public void onGesture(Gesture gesture) {
+        GestureType type = gesture.getType();
+        Log.i(getClass().getSimpleName(), type.toString());
     }
 
     public void onGestureStart(MotionEvent event) {

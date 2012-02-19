@@ -16,33 +16,28 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool.gesture.gestures;
-
-import android.view.MotionEvent;
+package name.wildswift.android.guitool.gesture.recognizers.simple;
 
 /**
- * 12.02.12
+ * 19.02.12
  *
  * @author Swift
  */
-public class LongPress extends Gesture{
-    private long size;
+public abstract class SimpleGesture {
+    public static final int DOWN = 0;
+    public static final int SINGLE_TAP = 1;
+    public static final int SCROLL = 2;
+    public static final int LONG_PRESS = 3;
+    public static final int FLING = 4;
+    public static final int DOUBLE_TAP = 5;
 
-    private LongPress(MotionEvent[] event) {
-        super();
-        this.size = event.length;
+    private int type;
+
+    protected SimpleGesture(int type) {
+        this.type = type;
     }
 
-    public static LongPress obtain(MotionEvent... events) {
-        return new LongPress(events);
-    }
-
-    public long getFingersCount() {
-        return size;
-    }
-
-    @Override
-    public GestureType getType() {
-        return GestureType.singleTap;
+    public int getType() {
+        return type;
     }
 }

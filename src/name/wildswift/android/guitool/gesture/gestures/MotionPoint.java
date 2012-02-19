@@ -18,31 +18,43 @@
 
 package name.wildswift.android.guitool.gesture.gestures;
 
-import android.view.MotionEvent;
-
 /**
- * 12.02.12
+ * 19.02.12
  *
  * @author Swift
  */
-public class LongPress extends Gesture{
-    private long size;
+public class MotionPoint {
+    private float x;
+    private float y;
 
-    private LongPress(MotionEvent[] event) {
-        super();
-        this.size = event.length;
+    public MotionPoint(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public static LongPress obtain(MotionEvent... events) {
-        return new LongPress(events);
+    public float getX() {
+        return x;
     }
 
-    public long getFingersCount() {
-        return size;
+    public float getY() {
+        return y;
     }
 
     @Override
-    public GestureType getType() {
-        return GestureType.singleTap;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MotionPoint that = (MotionPoint) o;
+
+        return Float.compare(that.x, x) == 0 && Float.compare(that.y, y) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        return result;
     }
 }

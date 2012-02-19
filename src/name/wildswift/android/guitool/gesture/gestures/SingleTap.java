@@ -18,31 +18,33 @@
 
 package name.wildswift.android.guitool.gesture.gestures;
 
-import android.view.MotionEvent;
-
 /**
  * 12.02.12
  *
  * @author Swift
  */
-public class SingleTap extends Gesture{
-    private long size;
+public class SingleTap extends Gesture {
 
-    private SingleTap(MotionEvent[] event) {
-        super(event);
-        this.size = event.length;
+    private MotionPoint[] points;
+
+    private SingleTap(MotionPoint[] points) {
+        this.points = points;
     }
 
-    public static SingleTap obtain(MotionEvent... events){
+    public static SingleTap obtain(MotionPoint[] events){
         return new SingleTap(events);
     }
 
     public long getFingersCount() {
-        return size;
+        return points.length;
     }
 
     @Override
     public GestureType getType() {
         return GestureType.singleTap;
+    }
+
+    public MotionPoint getPoint(int finger) {
+        return points[finger];
     }
 }

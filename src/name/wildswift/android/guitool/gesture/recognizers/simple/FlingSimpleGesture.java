@@ -16,33 +16,43 @@
  * with Android Interface Toolkit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.wildswift.android.guitool.gesture.gestures;
+package name.wildswift.android.guitool.gesture.recognizers.simple;
 
 import android.view.MotionEvent;
 
 /**
- * 12.02.12
+ * 19.02.12
  *
  * @author Swift
  */
-public class LongPress extends Gesture{
-    private long size;
+public class FlingSimpleGesture extends SimpleGesture{
 
-    private LongPress(MotionEvent[] event) {
-        super();
-        this.size = event.length;
+    private MotionEvent e1;
+    private MotionEvent e2;
+    private float velocityX;
+    private float velocityY;
+
+    public FlingSimpleGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        super(FLING);
+        this.e1 = e1;
+        this.e2 = e2;
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
     }
 
-    public static LongPress obtain(MotionEvent... events) {
-        return new LongPress(events);
+    public MotionEvent getE1() {
+        return e1;
     }
 
-    public long getFingersCount() {
-        return size;
+    public MotionEvent getE2() {
+        return e2;
     }
 
-    @Override
-    public GestureType getType() {
-        return GestureType.singleTap;
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
     }
 }
