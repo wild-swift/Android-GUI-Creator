@@ -18,9 +18,9 @@
 
 package name.wildswift.android.guitool.gesture.recognizers;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import name.wildswift.android.guitool.gesture.OnGestureListener;
+import name.wildswift.android.guitool.gesture.gestures.LongPress;
 import name.wildswift.android.guitool.gesture.gestures.MotionPoint;
 import name.wildswift.android.guitool.gesture.gestures.SingleTap;
 import name.wildswift.android.guitool.gesture.recognizers.simple.DownSimpleGesture;
@@ -35,16 +35,15 @@ import java.util.List;
  *
  * @author Swift
  */
-public class SingleTapRecognizer extends GestureRecognizer{
+public class LongPressRecognizer extends GestureRecognizer{
     private OnGestureListener listener;
     private static final long TIME_DELTA = 50;
 
-    public SingleTapRecognizer(OnGestureListener listener) {
+    public LongPressRecognizer(OnGestureListener listener) {
         this.listener = listener;
     }
 
     private long timeStart = -1;
-    private long timeEnd = -1;
     private int fingersCount = 0;
     private List<MotionPoint> points = new ArrayList<MotionPoint>(10);
 
@@ -54,7 +53,7 @@ public class SingleTapRecognizer extends GestureRecognizer{
         for (int i = 0; i < gestures.length; i++) {
             SimpleGesture gesture = gestures[i];
             if (gesture == null) continue;
-            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.SINGLE_TAP && gesture.getType() != SimpleGesture.LONG_PRESS) return false;
+            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.LONG_PRESS) return false;
 
             if (gesture.getType() == SimpleGesture.DOWN) {
                 if (i == 0) {
@@ -71,22 +70,12 @@ public class SingleTapRecognizer extends GestureRecognizer{
                     }
                 }
             }
-            if (gesture.getType() == SimpleGesture.SINGLE_TAP) {
-                if (timeEnd < 0) {
-                    MotionEvent event = ((SingleTapSimpleGesture) gesture).getEvent();
-                    timeEnd = event.getEventTime();
-                    points.add(new MotionPoint(event.getX(), event.getY()));
-                    fingersCount--;
-                } else if (Math.abs(((SingleTapSimpleGesture) gesture).getEvent().getEventTime() - timeEnd) < TIME_DELTA) {
-                    MotionEvent event = ((SingleTapSimpleGesture) gesture).getEvent();
-                    points.add(new MotionPoint(event.getX(), event.getY()));
-                    fingersCount--;
-                } else {
-                    resetRecognizer();
-                    return false;
-                }
+            if (gesture.getType() == SimpleGesture.LONG_PRESS) {
+                MotionEvent event = ((SingleTapSimpleGesture) gesture).getEvent();
+                points.add(new MotionPoint(event.getX(), event.getY()));
+                fingersCount--;
                 if (fingersCount == 0) {
-                    listener.onGesture(SingleTap.obtain(points.toArray(new MotionPoint[points.size()])));
+                    listener.onGesture(LongPress.obtain(points.toArray(new MotionPoint[points.size()])));
                     resetRecognizer();
                 }
             }
@@ -96,7 +85,6 @@ public class SingleTapRecognizer extends GestureRecognizer{
 
     private void resetRecognizer() {
         timeStart = -1;
-        timeEnd = -1;
         fingersCount = 0;
         points.clear();
     }

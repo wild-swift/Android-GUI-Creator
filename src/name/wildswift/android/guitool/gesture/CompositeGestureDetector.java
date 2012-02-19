@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import name.wildswift.android.guitool.gesture.helpers.DetectorsElement;
 import name.wildswift.android.guitool.gesture.helpers.FingerState;
 import name.wildswift.android.guitool.gesture.recognizers.GestureRecognizer;
+import name.wildswift.android.guitool.gesture.recognizers.LongPressRecognizer;
 import name.wildswift.android.guitool.gesture.recognizers.SingleTapRecognizer;
 import name.wildswift.android.guitool.gesture.recognizers.simple.SimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.*;
@@ -74,7 +75,8 @@ public class CompositeGestureDetector {
         }
 
         recognizers = new GestureRecognizer[]{
-                new SingleTapRecognizer(listener)
+                new SingleTapRecognizer(listener),
+                new LongPressRecognizer(listener)
         };
     }
 
