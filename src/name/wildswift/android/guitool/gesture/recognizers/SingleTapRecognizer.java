@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import name.wildswift.android.guitool.gesture.OnGestureListener;
 import name.wildswift.android.guitool.gesture.gestures.MotionPoint;
 import name.wildswift.android.guitool.gesture.gestures.SingleTap;
+import name.wildswift.android.guitool.gesture.recognizers.simple.DoubleTapSimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.DownSimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.SimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.SingleTapSimpleGesture;
@@ -54,7 +55,9 @@ public class SingleTapRecognizer extends GestureRecognizer{
         for (int i = 0; i < gestures.length; i++) {
             SimpleGesture gesture = gestures[i];
             if (gesture == null) continue;
-            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.SINGLE_TAP && gesture.getType() != SimpleGesture.LONG_PRESS) return false;
+            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.SINGLE_TAP &&
+                    gesture.getType() != SimpleGesture.LONG_PRESS && gesture.getType() != SimpleGesture.DOUBLE_TAP)
+                return false;
 
             if (gesture.getType() == SimpleGesture.DOWN) {
                 if (i == 0) {
@@ -64,6 +67,21 @@ public class SingleTapRecognizer extends GestureRecognizer{
 
                 if (i > 0) {
                     if (Math.abs(timeStart - ((DownSimpleGesture) gesture).getEvent().getEventTime()) >= TIME_DELTA) {
+                        resetRecognizer();
+                        return false;
+                    } else {
+                        fingersCount++;
+                    }
+                }
+            }
+            if (gesture.getType() == SimpleGesture.DOUBLE_TAP) {
+                if (i == 0) {
+                    timeStart = ((DoubleTapSimpleGesture) gesture).getEvent().getEventTime();
+                    fingersCount = 1;
+                }
+
+                if (i > 0) {
+                    if (Math.abs(timeStart - ((DoubleTapSimpleGesture) gesture).getEvent().getEventTime()) >= TIME_DELTA) {
                         resetRecognizer();
                         return false;
                     } else {

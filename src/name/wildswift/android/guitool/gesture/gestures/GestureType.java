@@ -25,9 +25,8 @@ package name.wildswift.android.guitool.gesture.gestures;
  */
 public enum GestureType {
     singleTap,
-    singleLongTap,
-    scroll,
     longPress,
+    scroll,
     fling,
     doubleTap
 }

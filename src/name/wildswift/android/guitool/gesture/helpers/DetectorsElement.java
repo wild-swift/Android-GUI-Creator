@@ -35,11 +35,11 @@ public class DetectorsElement {
     private GestureDetector longPressDetector;
 
     public <T extends android.view.GestureDetector.OnGestureListener & android.view.GestureDetector.OnDoubleTapListener> DetectorsElement(Context context, T listener) {
-        this.detector = new GestureDetector(context, listener);
+        this.detector = new GestureDetector(context, new OnGestureListenerWrapper(listener));
         this.detector.setIsLongpressEnabled(false);
-        this.detector.setOnDoubleTapListener(listener);
         this.longPressDetector = new GestureDetector(context, new LongPressWrapper(listener));
         this.longPressDetector.setIsLongpressEnabled(true);
+        this.longPressDetector.setOnDoubleTapListener(listener);
     }
 
     public boolean onTouchEvent(MotionEvent ev) {

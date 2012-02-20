@@ -24,6 +24,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import name.wildswift.android.guitool.gesture.helpers.DetectorsElement;
 import name.wildswift.android.guitool.gesture.helpers.FingerState;
+import name.wildswift.android.guitool.gesture.recognizers.DoubleTapRecognizer;
 import name.wildswift.android.guitool.gesture.recognizers.GestureRecognizer;
 import name.wildswift.android.guitool.gesture.recognizers.LongPressRecognizer;
 import name.wildswift.android.guitool.gesture.recognizers.SingleTapRecognizer;
@@ -46,6 +47,7 @@ public class CompositeGestureDetector {
     private DetectorsElement[] detectors;
     private FingerState[] states;
     private SimpleGesture[] gestures;
+    private boolean gesturesCleared = true;
 
     private GestureRecognizer[] recognizers;
 
@@ -76,7 +78,8 @@ public class CompositeGestureDetector {
 
         recognizers = new GestureRecognizer[]{
                 new SingleTapRecognizer(listener),
-                new LongPressRecognizer(listener)
+                new LongPressRecognizer(listener),
+                new DoubleTapRecognizer(listener)
         };
     }
 
@@ -166,6 +169,7 @@ public class CompositeGestureDetector {
 
 
     private void notifyRecognizers() {
+        if (gesturesCleared) return;
         LinkedList<GestureRecognizer> recognizersForDelete = new LinkedList<GestureRecognizer>();
         for (GestureRecognizer recognizer : activeRecognizers) {
             if (!recognizer.onNewEvent(gestures)) {
@@ -176,6 +180,7 @@ public class CompositeGestureDetector {
         for (int i = 0; i < gestures.length; i++) {
             gestures[i] = null;
         }
+        gesturesCleared = true;
     }
 
 
@@ -188,6 +193,7 @@ public class CompositeGestureDetector {
 
         public boolean onDown(MotionEvent motionEvent) {
             gestures[index] = new DownSimpleGesture(motionEvent);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onDown " + index);
             return true;
         }
@@ -198,12 +204,14 @@ public class CompositeGestureDetector {
 
         public boolean onSingleTapUp(MotionEvent motionEvent) {
             gestures[index] = new SingleTapSimpleGesture(motionEvent);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onSingleTapUp " + index);
             return true;
         }
 
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float v, float v1) {
             gestures[index] = new ScrollSimpleGesture(e1, e2, v, v1);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onScroll " + index);
             return true;
         }
@@ -211,12 +219,14 @@ public class CompositeGestureDetector {
         public void onLongPress(MotionEvent motionEvent) {
             // because this event generates from handler after some time, it have special handling
             gestures[index] = new LongPressSimpleGesture(motionEvent);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onLongPress " + index);
             notifyRecognizers();
         }
 
         public boolean onFling(MotionEvent e1, MotionEvent e2, float v, float v1) {
             gestures[index] = new FlingSimpleGesture(e1, e2, v, v1);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onFling " + index);
             return true;
         }
@@ -227,7 +237,8 @@ public class CompositeGestureDetector {
         }
 
         public boolean onDoubleTap(MotionEvent motionEvent) {
-            gestures[index] = new DoubleTapGesture(motionEvent);
+            gestures[index] = new DoubleTapSimpleGesture(motionEvent);
+            gesturesCleared = false;
             Log.d(getClass().getSimpleName(), "onDoubleTap " + index);
             return true;
         }

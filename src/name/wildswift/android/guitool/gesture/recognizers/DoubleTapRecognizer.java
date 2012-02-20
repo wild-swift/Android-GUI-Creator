@@ -20,11 +20,11 @@ package name.wildswift.android.guitool.gesture.recognizers;
 
 import android.view.MotionEvent;
 import name.wildswift.android.guitool.gesture.OnGestureListener;
-import name.wildswift.android.guitool.gesture.gestures.LongPress;
+import name.wildswift.android.guitool.gesture.gestures.DoubleTap;
 import name.wildswift.android.guitool.gesture.gestures.MotionPoint;
 import name.wildswift.android.guitool.gesture.gestures.SingleTap;
+import name.wildswift.android.guitool.gesture.recognizers.simple.DoubleTapSimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.DownSimpleGesture;
-import name.wildswift.android.guitool.gesture.recognizers.simple.LongPressSimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.SimpleGesture;
 import name.wildswift.android.guitool.gesture.recognizers.simple.SingleTapSimpleGesture;
 
@@ -36,15 +36,17 @@ import java.util.List;
  *
  * @author Swift
  */
-public class LongPressRecognizer extends GestureRecognizer{
+public class DoubleTapRecognizer extends GestureRecognizer{
     private OnGestureListener listener;
     private static final long TIME_DELTA = 50;
 
-    public LongPressRecognizer(OnGestureListener listener) {
+    public DoubleTapRecognizer(OnGestureListener listener) {
         this.listener = listener;
     }
 
     private long timeStart = -1;
+    private int downNum = 0;
+    private long timeEnd = -1;
     private int fingersCount = 0;
     private List<MotionPoint> points = new ArrayList<MotionPoint>(10);
 
@@ -54,7 +56,7 @@ public class LongPressRecognizer extends GestureRecognizer{
         for (int i = 0; i < gestures.length; i++) {
             SimpleGesture gesture = gestures[i];
             if (gesture == null) continue;
-            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.LONG_PRESS) return false;
+            if (gesture.getType() != SimpleGesture.DOWN && gesture.getType() != SimpleGesture.SINGLE_TAP && gesture.getType() != SimpleGesture.DOUBLE_TAP) return false;
 
             if (gesture.getType() == SimpleGesture.DOWN) {
                 if (i == 0) {
@@ -64,19 +66,34 @@ public class LongPressRecognizer extends GestureRecognizer{
 
                 if (i > 0) {
                     if (Math.abs(timeStart - ((DownSimpleGesture) gesture).getEvent().getEventTime()) >= TIME_DELTA) {
-                        resetRecognizer();
-                        return false;
+                        if (downNum == 0) {
+                            downNum = 1;
+                            timeStart = ((DownSimpleGesture) gesture).getEvent().getEventTime();
+                        } else {
+                            resetRecognizer();
+                            return false;
+                        }
                     } else {
                         fingersCount++;
                     }
                 }
             }
-            if (gesture.getType() == SimpleGesture.LONG_PRESS) {
-                MotionEvent event = ((LongPressSimpleGesture) gesture).getEvent();
-                points.add(new MotionPoint(event.getX(), event.getY()));
-                fingersCount--;
+            if (gesture.getType() == SimpleGesture.DOUBLE_TAP) {
+                if (timeEnd < 0) {
+                    MotionEvent event = ((DoubleTapSimpleGesture) gesture).getEvent();
+                    timeEnd = event.getEventTime();
+                    points.add(new MotionPoint(event.getX(), event.getY()));
+                    fingersCount--;
+                } else if (Math.abs(((DoubleTapSimpleGesture) gesture).getEvent().getEventTime() - timeEnd) < TIME_DELTA) {
+                    MotionEvent event = ((DoubleTapSimpleGesture) gesture).getEvent();
+                    points.add(new MotionPoint(event.getX(), event.getY()));
+                    fingersCount--;
+                } else {
+                    resetRecognizer();
+                    return false;
+                }
                 if (fingersCount == 0) {
-                    listener.onGesture(LongPress.obtain(points.toArray(new MotionPoint[points.size()])));
+                    listener.onGesture(DoubleTap.obtain(points.toArray(new MotionPoint[points.size()])));
                     resetRecognizer();
                 }
             }
@@ -86,7 +103,9 @@ public class LongPressRecognizer extends GestureRecognizer{
 
     private void resetRecognizer() {
         timeStart = -1;
+        timeEnd = -1;
         fingersCount = 0;
+        downNum = 0;
         points.clear();
     }
 }

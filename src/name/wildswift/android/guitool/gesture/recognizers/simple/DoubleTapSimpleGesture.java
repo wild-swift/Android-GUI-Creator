@@ -25,10 +25,10 @@ import android.view.MotionEvent;
  *
  * @author Swift
  */
-public class DoubleTapGesture extends SimpleGesture {
+public class DoubleTapSimpleGesture extends SimpleGesture {
     private MotionEvent event;
 
-    public DoubleTapGesture(MotionEvent event) {
+    public DoubleTapSimpleGesture(MotionEvent event) {
         super(DOUBLE_TAP);
         this.event = event;
     }

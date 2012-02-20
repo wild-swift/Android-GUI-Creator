@@ -23,16 +23,16 @@ package name.wildswift.android.guitool.gesture.gestures;
  *
  * @author Swift
  */
-public class LongPress extends Gesture {
+public class DoubleTap extends Gesture {
 
     private MotionPoint[] points;
 
-    private LongPress(MotionPoint[] points) {
+    private DoubleTap(MotionPoint[] points) {
         this.points = points;
     }
 
-    public static LongPress obtain(MotionPoint[] events){
-        return new LongPress(events);
+    public static DoubleTap obtain(MotionPoint[] events) {
+        return new DoubleTap(events);
     }
 
     public long getFingersCount() {
@@ -41,7 +41,7 @@ public class LongPress extends Gesture {
 
     @Override
     public GestureType getType() {
-        return GestureType.longPress;
+        return GestureType.doubleTap;
     }
 
     public MotionPoint getPoint(int finger) {
