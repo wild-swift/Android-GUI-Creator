@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.SeekBar;
 import name.wildswift.android.guitool.view.RotateDrawable;
 
 /**
@@ -33,7 +32,7 @@ import name.wildswift.android.guitool.view.RotateDrawable;
  *
  * @author Swift
  */
-public class MainBuilderScreen extends Activity implements View.OnDragListener, View.OnTouchListener, SeekBar.OnSeekBarChangeListener {
+public class MainBuilderScreen extends Activity implements View.OnDragListener, View.OnTouchListener {
 
     private RotateDrawable d;
 
@@ -45,9 +44,6 @@ public class MainBuilderScreen extends Activity implements View.OnDragListener, 
         findViewById(R.id.control).setOnTouchListener(this);
         d = new RotateDrawable(getResources().getDrawable(R.drawable.menu_open_icon));
         findViewById(R.id.control).setBackgroundDrawable(d);
-        ((SeekBar) findViewById(R.id.levelChange)).setMax(180);
-        ((SeekBar) findViewById(R.id.levelChange)).setOnSeekBarChangeListener(this);
-
     }
 
 
@@ -62,17 +58,5 @@ public class MainBuilderScreen extends Activity implements View.OnDragListener, 
             view.startDrag(new ClipData("test", new String[]{"text/plain"}, new ClipData.Item("test")), new View.DragShadowBuilder(view), null, 0);
         }
         return false;  
-    }
-
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        d.setLevel(i);
-    }
-
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

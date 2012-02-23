@@ -22,12 +22,15 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
     <FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/previewFrame"/>
-    <LinearLayout android:layout_width="200dp" android:layout_height="fill_parent"
-                  android:orientation="vertical" android:gravity="center_horizontal" android:background="#FFF">
-        <View android:layout_width="25dp" android:layout_height="25dp" android:background="#00a"
-              android:layout_marginTop="10dp" android:id="@+id/control"/>
-        <SeekBar android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/levelChange"/>
-    </LinearLayout>
+
+    <name.wildswift.android.guitool.view.SlidePanel android:layout_width="200dp" android:layout_height="fill_parent">
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+                      android:orientation="vertical" android:gravity="center_horizontal" android:background="@drawable/components_row_background">
+            <View android:layout_width="25dp" android:layout_height="25dp" android:background="#00a"
+                  android:layout_marginTop="10dp" android:id="@+id/control"/>
+        </LinearLayout>
+    </name.wildswift.android.guitool.view.SlidePanel>
+
     <name.wildswift.android.guitool.decorators.TestView android:layout_width="fill_parent"
                                                         android:layout_height="fill_parent"
                                                         android:layout_marginLeft="250dp"/>

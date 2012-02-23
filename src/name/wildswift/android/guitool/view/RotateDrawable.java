@@ -47,6 +47,14 @@ public class RotateDrawable extends Drawable implements Drawable.Callback {
         }
     }
 
+    public void setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
+
+    public void setMinLevel(int minLevel) {
+        this.minLevel = minLevel;
+    }
+
     /**
      * Returns the original drawable
      * @return original drawable
